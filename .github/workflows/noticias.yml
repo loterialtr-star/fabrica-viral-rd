@@ -1,8 +1,5 @@
 name: Fabrica Viral RD
-on:
-  schedule:
-    - cron: '30 10 * * *'
-  workflow_dispatch:
+on: [workflow_dispatch]
 jobs:
   crear-video:
     runs-on: ubuntu-latest
@@ -11,10 +8,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
-      - run: pip install -r requirements.txt
-      - run: python robot/generador.py
-      - uses: actions/upload-artifact@v4
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Run robot
+        run: python robot/generador.py
+      - name: Upload video
+        uses: actions/upload-artifact@v4
         with:
-          name: video-viral
-          path: output/
+          name: video-tarot
+          path: output/video_final.mp4
